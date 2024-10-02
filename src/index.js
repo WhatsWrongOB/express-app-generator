@@ -93,7 +93,7 @@ function createIndexFile(projectDir, answers) {
   if (answers.useEnvFile) {
     importLines.push(`import dotenv from 'dotenv';`);
     middlewareLines.push(`dotenv.config();`);
-    const envFileContent = `PORT=3000;`.trim();
+    const envFileContent = `PORT=3000`.trim();
     fs.writeFileSync(`${projectDir}/.env`, envFileContent);
   }
 
@@ -105,7 +105,7 @@ app.use("/", (req, res) => {
      res.send("Happy Coding 🚀");
 });
 
-const port = process.env.PORT || 3000; 
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(\`Express running → On http://localhost:\${port} 🚀\`); 
 });
