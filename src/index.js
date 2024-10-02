@@ -30,12 +30,12 @@ function createProjectDirectories(projectDir) {
 function createPackageJson(projectDir, projectName, answers) {
   const dependencies = {
     express: getLatestVersion("express"),
+    ...(answers.useEnvFile && { dotenv: getLatestVersion("dotenv") }),
+    ...(answers.useCors && { cors: getLatestVersion("cors") }),
   };
 
   const devDependencies = {
     nodemon: getLatestVersion("nodemon"),
-    ...(answers.useEnvFile && { dotenv: getLatestVersion("dotenv") }),
-    ...(answers.useCors && { cors: getLatestVersion("cors") }),
     ...(answers.language === "Typescript" && {
       typescript: getLatestVersion("typescript"),
       "@types/node": getLatestVersion("@types/node"),
@@ -108,9 +108,8 @@ app.use("/", (req, res) => {
 
 const port = process.env.PORT || ${answers.portNo};
 app.listen(port, () => {
-    console.log(\`🚀 Express running → On http://localhost:\${port} 🔥\`);
+    console.log(🚀 Express running → On http://localhost:${port} 🔥);
 });
-
 
 `.trim();
 
