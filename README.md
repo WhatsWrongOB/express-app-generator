@@ -26,7 +26,7 @@ Welcome to the Express Application Generator! This CLI tool allows you to quickl
 
 ## Installation
 
-To use this generator, you'll need to have Node.js and npm installed on your machine. If you haven't already, download and install Node.js from the [official website](https://nodejs.org/).
+**npx create-ob-app**
 
 Clone this repository or download the files, then navigate to the directory in your terminal:
 

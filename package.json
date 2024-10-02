@@ -1,5 +1,5 @@
 {
-  "name": "create-express-app",
+  "name": "create-ob-app",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
