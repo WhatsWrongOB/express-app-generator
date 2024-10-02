@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import inquirer from "inquirer";
 import fs from "fs";
 import chalk from "chalk";
@@ -7,32 +9,32 @@ const questions = [
   {
     type: "input",
     name: "appName",
-    message: "What would you like to name your Express application?",
+    message: "Enter your express project name:",
     default: "server",
   },
   {
     type: "list",
     name: "language",
-    message: "Which language you want to use for your project?",
+    message: "Which language you want to use?",
     choices: ["Javascript", "Typescript"],
     default: "Javascript",
   },
   {
     type: "input",
     name: "portNo",
-    message: "Please specify the port number you want to use:",
+    message: "Please specify the port number:",
     default: 3000,
   },
   {
     type: "confirm",
     name: "useCors",
-    message: "Do you want to enable CORS for cross-origin requests?",
+    message: "Do you want to enable CORS?",
     default: true,
   },
   {
     type: "confirm",
     name: "useEnvFile",
-    message: "Do you want to use an environment file?",
+    message: "Do you want to use an .env file?",
     default: true,
   },
   {
@@ -83,6 +85,7 @@ function createPackageJson(projectDir, projectName, answers) {
       typescript: getLatestVersion("typescript"),
       "@types/node": getLatestVersion("@types/node"),
       "@types/express": getLatestVersion("@types/express"),
+      "@types/cors": getLatestVersion("@types/cors"),
     }),
   };
 
@@ -217,6 +220,8 @@ ${useEnvFile ? ".env" : ""}
 }
 
 async function createApp() {
+  console.log("\n");
+
   console.log(
     chalk.magentaBright(
       chalk.italic("Welcome to the Express.js project generator! 🚀")
@@ -259,16 +264,15 @@ async function createApp() {
   console.log(chalk.magentaBright(chalk.italic("Next Steps:")));
   console.log(chalk.bold(`-> cd ${projectName}`));
   console.log(chalk.bold("-> npm install"));
-  if (answers.language === "ts") {
-    console.log(chalk.bold("-> npm run build"));
-    console.log(chalk.bold("-> npm run start"));
-  } else {
-    console.log(chalk.bold("-> npm run start"));
-  }
+  console.log(chalk.bold("-> npm start"));
+
+  console.log("\n");
 
   console.log(
     chalk.bgBlueBright(chalk.italic("CLI Developed by OB 🔥, Happy Coding 🎉"))
   );
+
+  console.log("\n");
 }
 
 createApp();

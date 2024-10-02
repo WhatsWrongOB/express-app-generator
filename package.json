@@ -1,5 +1,5 @@
 {
-  "name": "cli",
+  "name": "create-express-app",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -7,12 +7,12 @@
     "start": "node src/index.js"
   },
   "bin": {
-    "create-express-app": "./index.js"
+    "create-express-app": "src/index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["express", "generator", "cli"],
+  "author": "Obaid Ali Siddiqui",
   "license": "ISC",
-  "description": "",
+  "description": "A CLI tool for generating Express.js applications.",
   "dependencies": {
     "chalk": "^5.3.0",
     "fs-extra": "^11.2.0",
