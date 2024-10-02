@@ -23,14 +23,9 @@ Welcome to the Express Application Generator! This CLI tool allows you to quickl
 - **Environment Variables**: Automatically set up a `.env` file for managing environment variables.
 - **Git Ignore**: Generate a `.gitignore` file to exclude unnecessary files from version control.
 
-
 ## Installation
 
-**npx create-ob-app**
-
-Clone this repository or download the files, then navigate to the directory in your terminal:
+You can use the generator without installing it globally by using `npx`:
 
 ```bash
-git clone https://github.com/WhatsWrongOB/express-app-generator.git
-cd express-app-generator
-npm install
+npx create-ob-app
