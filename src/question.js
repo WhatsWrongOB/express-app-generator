@@ -13,12 +13,6 @@ const questions = [
       default: "Javascript",
     },
     {
-      type: "input",
-      name: "portNo",
-      message: "Please specify the port number:",
-      default: 3000,
-    },
-    {
       type: "confirm",
       name: "useCors",
       message: "Do you want to enable CORS?",
@@ -40,7 +34,7 @@ const questions = [
       type: "confirm",
       name: "useDocker",
       message: "Do you want to use Docker for deployment?",
-      default: true,
+      default: false,
     },
   ];
 

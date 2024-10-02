@@ -4,7 +4,7 @@ import inquirer from "inquirer";
 import fs from "fs";
 import chalk from "chalk";
 import { execSync } from "child_process";
-import questions from "./question";
+import questions from "./question.js";
 
 function getLatestVersion(packageName) {
   try {
@@ -93,30 +93,26 @@ function createIndexFile(projectDir, answers) {
   if (answers.useEnvFile) {
     importLines.push(`import dotenv from 'dotenv';`);
     middlewareLines.push(`dotenv.config();`);
-    const envFileContent = `
-PORT=${answers.portNo};`.trim();
+    const envFileContent = `PORT=3000;`.trim();
     fs.writeFileSync(`${projectDir}/.env`, envFileContent);
   }
 
-  const content = `
+const content = `
 ${importLines.join("\n")}
 ${middlewareLines.join("\n")}
 
 app.use("/", (req, res) => {
-     res.send("Happy Coding 🚀")
-  })
-
-const port = process.env.PORT || ${answers.portNo};
-app.listen(port, () => {
-    console.log(🚀 Express running → On http://localhost:${port} 🔥);
+     res.send("Happy Coding 🚀");
 });
 
+const port = process.env.PORT || 3000; 
+app.listen(port, () => {
+    console.log(\`Express running → On http://localhost:\${port} 🚀\`); 
+});
 `.trim();
 
   fs.writeFileSync(
-    `${projectDir}/src/index.${
-      answers.language === "Typescript" ? "ts" : "js"
-    }`,
+    `${projectDir}/src/index.${answers.language === "Typescript" ? "ts" : "js"}`,
     content,
     "utf8"
   );
@@ -169,7 +165,7 @@ RUN npm install
 COPY . .
 
 # Expose the application port.
-EXPOSE ${portNo}
+EXPOSE 3000  # Set static port
 
 # Start the application.
 CMD [ "npm", "run", "dev" ]
