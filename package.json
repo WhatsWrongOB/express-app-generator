@@ -1,6 +1,6 @@
 {
   "name": "create-ob-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -9,7 +9,11 @@
   "bin": {
     "create-express-app": "src/index.js"
   },
-  "keywords": ["express", "generator", "cli"],
+  "keywords": [
+    "express",
+    "generator",
+    "cli"
+  ],
   "author": "Obaid Ali Siddiqui",
   "license": "ISC",
   "description": "A CLI tool for generating Express.js applications.",
