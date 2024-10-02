@@ -147,10 +147,17 @@ PORT=${answers.portNo};`.trim();
 ${importLines.join("\n")}
 ${middlewareLines.join("\n")}
 
+app.use("/", (req, res) => {
+     res.send("Happy Coding 🚀")
+  })
+
 const port = process.env.PORT || ${answers.portNo};
 app.listen(port, () => {
     console.log(\`🚀 Express running → On http://localhost:\${port} 🔥\`);
-});`.trim();
+});
+
+
+`.trim();
 
   fs.writeFileSync(
     `${projectDir}/src/index.${
@@ -227,7 +234,6 @@ ${useEnvFile ? ".env" : ""}
 }
 
 async function createApp() {
-  
   console.log("\n");
 
   console.log(
