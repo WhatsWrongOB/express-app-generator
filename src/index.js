@@ -6,6 +6,11 @@ import inquirer from "inquirer";
 import questions from "./question.js";
 import { execSync } from "child_process";
 
+/**
+ * Get the latest version of a package from npm.
+ * @param {string} packageName - The name of the npm package.
+ * @returns {string | null} - The latest version of the package or null if an error occurs.
+ */
 function getLatestVersion(packageName) {
   try {
     return execSync(`npm show ${packageName} version`).toString().trim();
@@ -15,6 +20,12 @@ function getLatestVersion(packageName) {
   }
 }
 
+/**
+ * Create the project directory structure based on user input.
+ * @param {string} projectDir - The path to the project directory.
+ * @param {object} answers - User's answers from the CLI prompts.
+ * @returns {void}
+ */
 function createProjectDirectories(projectDir, answers) {
   const dirs = [
     `${projectDir}/src`,
@@ -35,6 +46,13 @@ function createProjectDirectories(projectDir, answers) {
   dirs.forEach((dir) => fs.mkdirSync(dir, { recursive: true }));
 }
 
+/**
+ * Create the package.json file for the project with specified dependencies and scripts.
+ * @param {string} projectDir - The path to the project directory.
+ * @param {string} projectName - The name of the project.
+ * @param {object} answers - User's answers from the CLI prompts.
+ * @returns {void}
+ */
 function createPackageJson(projectDir, projectName, answers) {
   const dependencies = {
     express: getLatestVersion("express"),
@@ -94,6 +112,12 @@ function createPackageJson(projectDir, projectName, answers) {
   );
 }
 
+/**
+ * Create the main index file for the Express.js application.
+ * @param {string} projectDir - The path to the project directory.
+ * @param {object} answers - User's answers from the CLI prompts.
+ * @returns {void}
+ */
 function createIndexFile(projectDir, answers) {
   const importLines = [`import express from 'express';`];
   const middlewareLines = [
@@ -178,6 +202,11 @@ app.listen(port, () => {
   );
 }
 
+/**
+ * Create the tsconfig.json file for the TypeScript project.
+ * @param {string} projectDir - The path to the project directory.
+ * @returns {void}
+ */
 function createTsConfig(projectDir) {
   const tsConfigContent = `
 {
@@ -199,6 +228,12 @@ function createTsConfig(projectDir) {
   fs.writeFileSync(`${projectDir}/tsconfig.json`, tsConfigContent, "utf8");
 }
 
+/**
+ * Create a .gitignore file for the project.
+ * @param {string} projectDir - The path to the project directory.
+ * @param {object} answers - User's answers from the CLI prompts.
+ * @returns {void}
+ */
 function createGitIgnore(projectDir, answers) {
   const gitIgnoreContent = `
 node_modules
@@ -207,6 +242,11 @@ dist`.trim();
   fs.writeFileSync(`${projectDir}/.gitignore`, gitIgnoreContent.trim(), "utf8");
 }
 
+/**
+ * Create a Dockerfile for the project.
+ * @param {string} projectDir - The path to the project directory.
+ * @returns {void}
+ */
 function createDockerFile(projectDir) {
   const dockerFileContent = `
 # Use the official Node.js image.
@@ -234,10 +274,20 @@ CMD [ "npm", "run", "dev" ]
   fs.writeFileSync(`${projectDir}/Dockerfile`, dockerFileContent, "utf8");
 }
 
+/**
+ * Create a .dockerignore file for the project.
+ * @param {string} projectDir - The path to the project directory.
+ * @param {boolean} useEnvFile - Indicates if an .env file is used.
+ * @returns {void}
+ */
 function createDockerIgnoreFile(projectDir, useEnvFile) {
   const dockerComposeContent = `
 node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
 ${useEnvFile ? ".env" : ""}
+dist
 `.trim();
 
   fs.writeFileSync(`${projectDir}/.dockerignore`, dockerComposeContent, "utf8");
