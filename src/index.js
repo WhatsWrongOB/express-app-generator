@@ -43,7 +43,6 @@ function createPackageJson(projectDir, projectName, answers) {
     ...(answers.useGraphQL && {
       graphql: getLatestVersion("graphql"),
       "apollo-server-express": getLatestVersion("apollo-server-express"),
-      "@apollo/server": getLatestVersion("@apollo/server"),
     }),
   };
 
