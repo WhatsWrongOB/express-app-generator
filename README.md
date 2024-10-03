@@ -10,13 +10,6 @@ Welcome to the **Express Application Generator**! This CLI tool allows you to qu
 ## Table of Contents
 
 - [Features](#features)
-- [Installation](#installation)# Express Application Generator
-
-Welcome to the Express Application Generator! This CLI tool allows you to quickly scaffold a new Express.js application with customizable options. Whether you are starting a new project or want to save time on boilerplate code, this generator will help you set up your application in minutes.
-
-## Table of Contents
-
-- [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration Options](#configuration-options)
