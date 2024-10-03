@@ -17,8 +17,7 @@ Welcome to the Express Application Generator! This CLI tool allows you to quickl
 
 - **Customizable Project Name**: Specify your application name during setup.
 - **TypeScript Support**: Option to scaffold your application using TypeScript for type safety and better development experience.
-- **Port Configuration**: Choose the port number for your server.
-- **Mongoose Integration**: Option to include Mongoose for MongoDB integration.
+- **GraphQL Support**: Enable graphql to make you backend to specify what data you need.
 - **CORS Support**: Enable Cross-Origin Resource Sharing (CORS) for your application.
 - **Environment Variables**: Automatically set up a `.env` file for managing environment variables.
 - **Git Ignore**: Generate a `.gitignore` file to exclude unnecessary files from version control.

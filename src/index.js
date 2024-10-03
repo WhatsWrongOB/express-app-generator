@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import inquirer from "inquirer";
 import fs from "fs";
 import chalk from "chalk";
-import { execSync } from "child_process";
+import inquirer from "inquirer";
 import questions from "./question.js";
+import { execSync } from "child_process";
 
 function getLatestVersion(packageName) {
   try {
@@ -15,15 +15,23 @@ function getLatestVersion(packageName) {
   }
 }
 
-function createProjectDirectories(projectDir) {
+function createProjectDirectories(projectDir, answers) {
   const dirs = [
     `${projectDir}/src`,
     `${projectDir}/src/routes`,
     `${projectDir}/src/controllers`,
+    `${projectDir}/src/services`,
     `${projectDir}/src/middlewares`,
+    `${projectDir}/src/models`,
     `${projectDir}/src/utils`,
     `${projectDir}/src/config`,
   ];
+  if (answers.useGraphQL) {
+    dirs.splice(1, 3);
+    dirs.push(`${projectDir}/src/graphQL`);
+    dirs.push(`${projectDir}/src/graphQL/schemas`);
+    dirs.push(`${projectDir}/src/graphQL/resolvers`);
+  }
   dirs.forEach((dir) => fs.mkdirSync(dir, { recursive: true }));
 }
 
@@ -32,6 +40,11 @@ function createPackageJson(projectDir, projectName, answers) {
     express: getLatestVersion("express"),
     ...(answers.useEnvFile && { dotenv: getLatestVersion("dotenv") }),
     ...(answers.useCors && { cors: getLatestVersion("cors") }),
+    ...(answers.useGraphQL && {
+      graphql: getLatestVersion("graphql"),
+      "apollo-server-express": getLatestVersion("apollo-server-express"),
+      "@apollo/server": getLatestVersion("@apollo/server"),
+    }),
   };
 
   const devDependencies = {
@@ -40,7 +53,12 @@ function createPackageJson(projectDir, projectName, answers) {
       typescript: getLatestVersion("typescript"),
       "@types/node": getLatestVersion("@types/node"),
       "@types/express": getLatestVersion("@types/express"),
-      "@types/cors": getLatestVersion("@types/cors"),
+      ...(answers.useCors && {
+        "@types/cors": getLatestVersion("@types/cors"),
+      }),
+      ...(answers.useGraphQL && {
+        "@types/graphql": getLatestVersion("@types/graphql"),
+      }),
     }),
   };
 
@@ -65,7 +83,6 @@ function createPackageJson(projectDir, projectName, answers) {
     main: answers.language === "Typescript" ? `dist/index.js` : `src/index.js`,
     type: "module",
     scripts,
-    author: "Your Name ...",
     license: "ISC",
     dependencies,
     devDependencies,
@@ -90,6 +107,17 @@ function createIndexFile(projectDir, answers) {
     middlewareLines.push(`app.use(cors({ origin: '*', credentials: true }));`);
   }
 
+  if (answers.useGraphQL) {
+    if (answers.language === "Javascript") {
+      importLines.push(`import { ApolloServer } from "apollo-server-express";`);
+    }
+    if (answers.language === "Typescript") {
+      importLines.push(
+        `import {ApolloServer, gql } from "apollo-server-express";`
+      );
+    }
+  }
+
   if (answers.useEnvFile) {
     importLines.push(`import dotenv from 'dotenv';`);
     middlewareLines.push(`dotenv.config();`);
@@ -97,22 +125,55 @@ function createIndexFile(projectDir, answers) {
     fs.writeFileSync(`${projectDir}/.env`, envFileContent);
   }
 
-const content = `
+  const graphqlServerSetup = `
+const typeDefs = ${answers.language === "Typescript" ? "gql`" : "`"}
+  type Query {
+    getResponse: String
+  }
+${answers.language === "Typescript" ? "`;" : "`;"}
+
+const resolvers = {
+  Query: {
+    getResponse: () => "Happy Coding 🚀",
+  },
+};
+
+const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+await apolloServer.start();
+apolloServer.applyMiddleware({ app });
+`;
+
+  const content = `
 ${importLines.join("\n")}
+
 ${middlewareLines.join("\n")}
 
-app.use("/", (req, res) => {
-     res.send("Happy Coding 🚀");
-});
+${
+  answers.useGraphQL
+    ? ""
+    : `app.use("/", (req, res) => {
+    res.send("Happy Coding 🚀");
+});`
+}
+
+${answers.useGraphQL ? graphqlServerSetup : ""}
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(\`Express running → On http://localhost:\${port} 🚀\`); 
+    console.log(\`Express running → On http://localhost:\${port}${
+      answers.useGraphQL ? `/graphql` : ""
+    } 🚀\`); 
 });
 `.trim();
 
   fs.writeFileSync(
-    `${projectDir}/src/index.${answers.language === "Typescript" ? "ts" : "js"}`,
+    `${projectDir}/src/index.${
+      answers.language === "Typescript" ? "ts" : "js"
+    }`,
     content,
     "utf8"
   );
@@ -147,7 +208,7 @@ dist`.trim();
   fs.writeFileSync(`${projectDir}/.gitignore`, gitIgnoreContent.trim(), "utf8");
 }
 
-function createDockerFile(projectDir, portNo) {
+function createDockerFile(projectDir) {
   const dockerFileContent = `
 # Use the official Node.js image.
 FROM node:18
@@ -200,7 +261,7 @@ async function createApp() {
 
   if (!fs.existsSync(projectDir)) {
     fs.mkdirSync(projectDir);
-    createProjectDirectories(projectDir);
+    createProjectDirectories(projectDir, answers);
     createPackageJson(projectDir, projectName, answers);
     createIndexFile(projectDir, answers);
 
@@ -213,7 +274,7 @@ async function createApp() {
     }
 
     if (answers.useDocker) {
-      createDockerFile(projectDir, answers.portNo);
+      createDockerFile(projectDir);
       createDockerIgnoreFile(projectDir, answers.useEnvFile);
     }
   }
