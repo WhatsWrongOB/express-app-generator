@@ -8,8 +8,8 @@ import { execSync } from "child_process";
 
 /**
  * Get the latest version of a package from npm.
- * @param {string} packageName - The name of the npm package.
- * @returns {string | null} - The latest version of the package or null if an error occurs.
+ * @param {string} packageName -
+ * @returns {string | null} -
  */
 function getLatestVersion(packageName) {
   try {
@@ -22,8 +22,8 @@ function getLatestVersion(packageName) {
 
 /**
  * Create the project directory structure based on user input.
- * @param {string} projectDir - The path to the project directory.
- * @param {object} answers - User's answers from the CLI prompts.
+ * @param {string} projectDir
+ * @param {object} answers
  * @returns {void}
  */
 function createProjectDirectories(projectDir, answers) {
@@ -48,9 +48,9 @@ function createProjectDirectories(projectDir, answers) {
 
 /**
  * Create the package.json file for the project with specified dependencies and scripts.
- * @param {string} projectDir - The path to the project directory.
- * @param {string} projectName - The name of the project.
- * @param {object} answers - User's answers from the CLI prompts.
+ * @param {string} projectDir
+ * @param {string} projectName
+ * @param {object} answers
  * @returns {void}
  */
 function createPackageJson(projectDir, projectName, answers) {
@@ -114,8 +114,8 @@ function createPackageJson(projectDir, projectName, answers) {
 
 /**
  * Create the main index file for the Express.js application.
- * @param {string} projectDir - The path to the project directory.
- * @param {object} answers - User's answers from the CLI prompts.
+ * @param {string} projectDir
+ * @param {object} answers
  * @returns {void}
  */
 function createIndexFile(projectDir, answers) {
@@ -204,7 +204,7 @@ app.listen(port, () => {
 
 /**
  * Create the tsconfig.json file for the TypeScript project.
- * @param {string} projectDir - The path to the project directory.
+ * @param {string} projectDir
  * @returns {void}
  */
 function createTsConfig(projectDir) {
@@ -230,8 +230,8 @@ function createTsConfig(projectDir) {
 
 /**
  * Create a .gitignore file for the project.
- * @param {string} projectDir - The path to the project directory.
- * @param {object} answers - User's answers from the CLI prompts.
+ * @param {string} projectDir
+ * @param {object} answers
  * @returns {void}
  */
 function createGitIgnore(projectDir, answers) {
@@ -244,7 +244,7 @@ dist`.trim();
 
 /**
  * Create a Dockerfile for the project.
- * @param {string} projectDir - The path to the project directory.
+ * @param {string} projectDir
  * @returns {void}
  */
 function createDockerFile(projectDir) {
@@ -276,8 +276,8 @@ CMD [ "npm", "run", "dev" ]
 
 /**
  * Create a .dockerignore file for the project.
- * @param {string} projectDir - The path to the project directory.
- * @param {boolean} useEnvFile - Indicates if an .env file is used.
+ * @param {string} projectDir
+ * @param {boolean} useEnvFile
  * @returns {void}
  */
 function createDockerIgnoreFile(projectDir, useEnvFile) {
