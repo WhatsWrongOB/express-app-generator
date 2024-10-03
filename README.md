@@ -2,7 +2,7 @@
 
 ![Node.js](https://img.shields.io/badge/Node.js-v18.0.0-brightgreen) ![TypeScript](https://img.shields.io/badge/TypeScript-v5.2.0-blue) ![GraphQL](https://img.shields.io/badge/GraphQL-v16.6.0-e10098) ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-Welcome to the **Express Application Generator**! This CLI tool allows you to quickly scaffold a new Express.js application with customizable options. Whether you're starting a new project or want to save time on boilerplate code, this generator will help you set up your application in just a few minutes.
+Welcome to the **Express Application Generator**! This CLI tool allows you to quickly scaffold a new Express.js application with customizable options. Whether you're starting a new project or want to save time on boilerplate code, this generator will help you set up your application in just a few minutes
 
 ## Table of Contents
 
