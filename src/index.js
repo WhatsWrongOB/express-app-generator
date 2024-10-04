@@ -60,7 +60,7 @@ function createPackageJson(projectDir, projectName, answers) {
     ...(answers.useCors && { cors: getLatestVersion("cors") }),
     ...(answers.useGraphQL && {
       graphql: getLatestVersion("graphql"),
-      "apollo-server-express": getLatestVersion("apollo-server-express"),
+      "@apollo/server": getLatestVersion("@apollo/server"),
     }),
   };
 
@@ -131,14 +131,10 @@ function createIndexFile(projectDir, answers) {
   }
 
   if (answers.useGraphQL) {
-    if (answers.language === "Javascript") {
-      importLines.push(`import { ApolloServer } from "apollo-server-express";`);
-    }
-    if (answers.language === "Typescript") {
-      importLines.push(
-        `import {ApolloServer, gql } from "apollo-server-express";`
-      );
-    }
+    importLines.push(`
+import { gql } from "graphql-tag";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";`);
   }
 
   if (answers.useEnvFile) {
@@ -149,25 +145,36 @@ function createIndexFile(projectDir, answers) {
   }
 
   const graphqlServerSetup = `
-const typeDefs = ${answers.language === "Typescript" ? "gql`" : "`"}
+const typeDefs = gql\`
   type Query {
     getResponse: String
   }
-${answers.language === "Typescript" ? "`;" : "`;"}
+\`;
 
 const resolvers = {
   Query: {
-    getResponse: () => "Happy Coding 🚀",
+    getResponse: () => "Happy Coding",
   },
 };
 
-const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
+async function startApolloServer() {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
 
-await apolloServer.start();
-apolloServer.applyMiddleware({ app });
+  try {
+    await server.start();
+    app.use("/graphql", expressMiddleware(server));
+    app.listen(4000, () => {
+      console.log(\`🚀 Server ready at http://localhost:4000/graphql\`);
+    });
+  } catch (error) {
+    console.error("Error starting Apollo Server:", error);
+  }
+}
+
+startApolloServer();
 `;
 
   const content = `
@@ -185,12 +192,14 @@ ${
 
 ${answers.useGraphQL ? graphqlServerSetup : ""}
 
-const port = process.env.PORT || 3000;
+${
+  answers.useGraphQL
+    ? ""
+    : `const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(\`Express running → On http://localhost:\${port}${
-      answers.useGraphQL ? `/graphql` : ""
-    } 🚀\`); 
-});
+    console.log(\`Express running → On http://localhost:\${port}🚀\`); 
+});`
+}
 `.trim();
 
   fs.writeFileSync(
