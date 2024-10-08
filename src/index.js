@@ -60,6 +60,7 @@ function createPackageJson(projectDir, projectName, answers) {
     ...(answers.useCors && { cors: getLatestVersion("cors") }),
     ...(answers.useGraphQL && {
       graphql: getLatestVersion("graphql"),
+      "graphql-tag": getLatestVersion("graphql-tag"),
       "@apollo/server": getLatestVersion("@apollo/server"),
     }),
   };
@@ -197,7 +198,7 @@ ${
     ? ""
     : `const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(\`Express running → On http://localhost:\${port}🚀\`); 
+    console.log(\`Express running → On http://localhost:\${port} 🚀\`); 
 });`
 }
 `.trim();
